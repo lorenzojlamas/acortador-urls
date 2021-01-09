@@ -17,6 +17,7 @@ exports.clipUrl = functions.https.onRequest(async(req, res) => {
 
     const database = admin.database().ref('urls');
     const clipedUrl = await createShortUrlInDatabese(database, url).catch((error) => {
+        // ! Caso no testeado
         // TODO: manejo de errores
         console.error(error);
         return res.status(500).send();
@@ -41,6 +42,7 @@ exports.goTo = functions.https.onRequest(async(req, res) => {
         console.log('URL to redirect: ', value.url)
         return res.redirect(303, snapshot.val().url);
     } else {
+        // ! Caso no testeado
         console.warn('Key not found: ', key);
         return res.status(404).send();
     }
