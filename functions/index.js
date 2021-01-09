@@ -36,9 +36,14 @@ exports.goTo = functions.https.onRequest(async(req, res) => {
     console.log("Request original url for key: ", key);
 
     admin.database().ref(`urls/${key}`).once('value').then((snapshot) => {
-
-        console.log('URL to redirect: ', snapshot.val().url)
-        return res.redirect(303, snapshot.val().url);
+        const value = snapshot.val();
+        if (value != null) {
+            console.log('URL to redirect: ', value.url)
+            return res.redirect(303, snapshot.val().url);
+        } else {
+            console.warn('Key not found: ', key);
+            return res.status(404).send();
+        }
     }).catch((error) => {
         console.error(error);
         return res.status(500).send();
