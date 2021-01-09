@@ -7,7 +7,7 @@ admin.initializeApp();
 // TODO: podría ser configurable por variables de entorno.
 const lengthOfShortUrls = 6;
 
-exports.clipUrl = functions.https.onRequest((req, res) => {
+exports.clipUrl = functions.https.onRequest(async(req, res) => {
 
     const url = req.query.url;
 
@@ -26,6 +26,24 @@ exports.clipUrl = functions.https.onRequest((req, res) => {
         console.error(error);
         return res.status(500).send();
     });
+
+});
+
+exports.goTo = functions.https.onRequest(async(req, res) => {
+    const key = req.query.key;
+
+
+    console.log("Request original url for key: ", key);
+
+    admin.database().ref(`urls/${key}`).once('value').then((snapshot) => {
+
+        console.log('URL to redirect: ', snapshot.val().url)
+        return res.redirect(303, snapshot.val().url);
+    }).catch((error) => {
+        console.error(error);
+        return res.status(500).send();
+    });
+
 
 });
 
@@ -54,8 +72,9 @@ function createShortUrlInDatabese(database, url) {
 
 function pushAndResolve(database, url, clipedUrl, resolve) {
 
-    return database.push({
-        clipedUrl: { url }
+
+    return database.child(clipedUrl).set({
+        url: url
     }).then((value) => {
         console.debug('Value saved', clipedUrl);
         return resolve(clipedUrl);
