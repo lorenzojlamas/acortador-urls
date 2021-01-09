@@ -95,7 +95,11 @@ function refStub(location) {
 
 function onceStub() {
     return {
-        child: jest.fn(childStub())
+        child: jest.fn(childStub()),
+        val: jest.fn((val) => {
+            return { url: 'someUrl' }
+
+        })
     };
 }
 
@@ -117,3 +121,36 @@ function childStub() {
 
     };
 }
+
+
+describe('goto', () => {
+    let oldDatabase;
+
+    beforeEach(() => {
+        oldDatabase = admin.database;
+    });
+
+    afterEach(() => {
+        admin.database = oldDatabase;
+    });
+
+    it("Given a request with key saved in the query params when the method is called then redirect to original url", done => {
+
+
+
+        const key = "someKey";
+        const mockRequest = {
+            query: {
+                key: key
+            }
+        };
+        const mockResponse = {
+            redirect: (code, toUrl) => {
+                expect(code).toEqual(303);
+                expect(toUrl).toEqual('someUrl');
+                done()
+            }
+        };
+        cliper.goTo(mockRequest, mockResponse);
+    });
+});
