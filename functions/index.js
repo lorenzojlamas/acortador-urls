@@ -22,7 +22,7 @@ exports.clipUrl = functions.https.onRequest(async(req, res) => {
         return res.status(500).send();
     });
 
-    return res.status(200).send(clipedUrl);
+    return res.status(200).json(clipedUrl).send();
 });
 
 exports.goTo = functions.https.onRequest(async(req, res) => {

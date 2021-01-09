@@ -40,7 +40,7 @@ describe("clipUrl", () => {
             status: (code) => {
                 expect(code).toEqual(200);
                 return {
-                    send: (response) => {
+                    json: (response) => {
                         expect(response.length).toBe(6);
                         done();
                     }
@@ -65,7 +65,7 @@ describe("clipUrl", () => {
             status: (code) => {
                 expect(code).toEqual(200);
                 return {
-                    send: (response) => {
+                    json: (response) => {
                         expect(response.length).toBe(6);
                         done();
                     }
