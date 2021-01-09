@@ -37,7 +37,7 @@ exports.goTo = functions.https.onRequest(async(req, res) => {
     });
 
     const value = snapshot.val();
-    if (value != null) {
+    if (value !== null) {
         console.log('URL to redirect: ', value.url)
         return res.redirect(303, snapshot.val().url);
     } else {
