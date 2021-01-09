@@ -19,11 +19,12 @@ exports.clipUrl = functions.https.onRequest((req, res) => {
 
 
     // TODO: usar async functions, Callback hell !!!!
-    createShortUrlInDatabese(database, url).then(clipedUrl => {
-        res.status(200).send(clipedUrl);
-    }).catch(error => {
+    createShortUrlInDatabese(database, url).then((clipedUrl) => {
+        return res.status(200).send(clipedUrl);
+    }).catch((error) => {
         // TODO: manejo de errores
-        res.status(500).send(error.message);
+        console.error(error);
+        return res.status(500).send();
     });
 
 });
@@ -34,30 +35,29 @@ function createShortUrlInDatabese(database, url) {
         clipedUrl = nanoId.nanoid(lengthOfShortUrls);
         console.debug("ClipedUrl: ", clipedUrl);
 
-        try {
-            database.get(clipedUrl).then((value) => {
-                console.log(value);
-                if (value == null) {
-                    pushAndResolve(database, url, clipedUrl, resolve);
-                } else {
-                    console.info('Value allready exist: ', value);
-                    createShortUrlInDatabese(database, url).then((newClipedUrl) => {
-                        resolve(newClipedUrl);
-                    });
-                }
-            });
-        } catch (error) {
+        database.once("value").then((snapshot) => {
+            if (snapshot.child(clipedUrl).exists()) {
+                console.info('Value allready exist: ', clipedUrl);
+                return createShortUrlInDatabese(database, url).then((newClipedUrl) => {
+                    return resolve(newClipedUrl);
+                });
+            } else {
+                return pushAndResolve(database, url, clipedUrl, resolve);
+            }
+        }).catch((error) => {
             reject(error);
-        }
+        })
+
 
     });
 }
 
 function pushAndResolve(database, url, clipedUrl, resolve) {
-    database.push({
-        clipedUrl: url
+
+    return database.push({
+        clipedUrl: { url }
     }).then((value) => {
-        console.debug('Value saved', value);
-        resolve(clipedUrl);
+        console.debug('Value saved', clipedUrl);
+        return resolve(clipedUrl);
     });
 }

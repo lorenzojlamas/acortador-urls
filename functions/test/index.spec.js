@@ -20,21 +20,11 @@ describe("clipUrl", () => {
 
     it("Given a request with url in the query params when the method is called then a short identifier is returned", done => {
 
+
         const databaseStub = jest.fn(() => {
             return {
                 ref: jest.fn(location => {
-                    return {
-                        push: jest.fn(val => Promise.resolve({ ref: location })),
-                        get: jest.fn(val => new Promise((resolve, reject) => {
-                            if (val === '123456') {
-                                resolve({ 123456: 'someUrl' });
-                            } else {
-                                resolve(null);
-
-                            }
-                        }))
-
-                    };
+                    return refStub(location);
                 })
             };
         });
@@ -85,3 +75,38 @@ describe("clipUrl", () => {
         cliper.clipUrl(mockRequest, mockResponse);
     })
 });
+
+function refStub(location) {
+    return {
+        push: jest.fn(val => Promise.resolve({ ref: location })),
+        once: jest.fn(val => new Promise((resolve, reject) => {
+            resolve(onceStub());
+
+        }))
+    };
+}
+
+function onceStub() {
+    return {
+        child: jest.fn(childStub())
+    };
+}
+
+function childStub() {
+    return (val) => {
+        if (val === '123456') {
+            return {
+                exists: jest.fn(() => {
+                    return true;
+                })
+            };
+        } else {
+            return {
+                exists: jest.fn(() => {
+                    return false;
+                })
+            };
+        }
+
+    };
+}
