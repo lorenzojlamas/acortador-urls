@@ -72,8 +72,9 @@ function createShortUrlInDatabese(database, url) {
 
 function pushAndResolve(database, url, clipedUrl, resolve) {
 
+    const child = database.child(clipedUrl);
 
-    return database.child(clipedUrl).set({
+    return child.set({
         url: url
     }).then((value) => {
         console.debug('Value saved', clipedUrl);

@@ -79,6 +79,13 @@ describe("clipUrl", () => {
 function refStub(location) {
     return {
         push: jest.fn(val => Promise.resolve({ ref: location })),
+        child: jest.fn(val => {
+            return {
+                set: jest.fn(val => {
+                    return Promise.resolve({ url: val })
+                })
+            }
+        }),
         once: jest.fn(val => new Promise((resolve, reject) => {
             resolve(onceStub());
 
