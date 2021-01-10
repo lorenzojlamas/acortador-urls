@@ -27,7 +27,11 @@ exports.clipUrl = functions.https.onRequest(async(req, res) => {
 });
 
 exports.goTo = functions.https.onRequest(async(req, res) => {
-    const key = req.query.key;
+
+    // TODO: Buscar una solución más prolija este es un WA.
+    const key = req.params['0'];
+
+    if (key === null || key === undefined) keyNotFound(key, res);
 
     // TODO: agregar trace al log
     // TODO: Definir librería y forma de logging
@@ -43,10 +47,15 @@ exports.goTo = functions.https.onRequest(async(req, res) => {
         return res.redirect(303, snapshot.val().url);
     } else {
         // ! Caso no testeado
-        console.warn('Key not found: ', key);
-        return res.status(404).send();
+        return keyNotFound(key, res);
     }
 });
+
+function keyNotFound(key, res) {
+    const message = `Key not found: ${key}`;
+    console.warn(message);
+    return res.status(404).send(message);
+}
 
 function createShortUrlInDatabese(database, url) {
     return new Promise(async(resolve, reject) => {

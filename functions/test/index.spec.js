@@ -136,12 +136,10 @@ describe('goto', () => {
 
     it("Given a request with key saved in the query params when the method is called then redirect to original url", done => {
 
-
-
         const key = "someKey";
         const mockRequest = {
-            query: {
-                key: key
+            params: {
+                0: "/" + key
             }
         };
         const mockResponse = {

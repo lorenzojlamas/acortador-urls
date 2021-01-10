@@ -33,5 +33,5 @@ curl --location --request GET 'https://us-central1-test-properati-8124e.cloudfun
 ```
 
 ``` bash
-curl --location --request GET 'https://us-central1-test-properati-8124e.cloudfunctions.net/goTo/?key=8UFmBb'
+curl --location --request GET 'https://us-central1-test-properati-8124e.cloudfunctions.net/goTo/prg8Mk'
 ```
