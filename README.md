@@ -1,8 +1,8 @@
-# test-properati
+# Acortador de URLs
 
 ## Aclaraciones sobre el problema a resolver
 
-- No había realizado functions de gcp hasta el momento, ante el desconocimietno me base en [firebase/functions-samples](https://github.com/firebase/functions-samples/tree/master/quickstarts/uppercase/functions), [firebase-functions-jest](https://github.com/jedfonner/firebase-functions-jest) y el init de firebase
+- No había realizado functions de gcp hasta el momento, ante el desconocimietno me base en [firebase/functions-samples](https://github.com/firebase/functions-samples/tree/master/quickstarts/uppercase/functions), [firebase-functions-jest](https://github.com/jedfonner/firebase-functions-jest) y el init de firebase.
 - Me hubiera gustado realizar el proyecto en Typescript, me siento más cómodo utlizandolo.
 - Tengo dominio en el stack mocha/chai/sinon, primera vez utilizando jest, se me complico el setup/mock para los test.
 - Al no dominiar muy bien el entorno no pude realizar TDD y quedo muy pegada la solución al framework.
